@@ -5,7 +5,7 @@ from schemas.forecast_data import ForecastData
 
 
 def visualizeForecast(df, model, test_size):
-    st.subheader("Прогнозирование")
+    st.write("# Прогнозирование")
 
     if st.button("Сделать прогноз"):
         train_size = int(df.shape[0] * (1 - test_size))
@@ -17,6 +17,12 @@ def visualizeForecast(df, model, test_size):
 
         fig = build_plot(train=df[:train_size], test=df[train_size:], forecast=forecast)
         st.pyplot(fig)
+
+        st.write(f'''
+        ## Качество модели:
+        - Обучающая выборка: MAPE = {(forecast.train_score.mape * 100):0.2f}%, R^2 = {forecast.train_score.r_square:0.2f}
+        - Тестовая выборка: MAPE = {(forecast.test_score.mape * 100):0.2f}, R^2 = {forecast.test_score.r_square:0.2f}
+        ''')
 
 
 def build_plot(train, test, forecast: ForecastData):
